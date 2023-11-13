@@ -42,7 +42,7 @@ namespace Rasstegaev_glazki
         {
             var currentServices = Rasstegaev_glazkiEntities.GetContext().Agent.ToList();
 
-            currentServices = currentServices.Where(p => p.Title.ToLower().Contains(TBSearch.Text.ToLower()) || p.Phone.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-","").ToLower().Contains(TBSearch.Text.ToLower()) || p.Email.ToLower().Contains(TBSearch.Text.ToLower())).ToList();
+            currentServices = currentServices.Where(p => p.Title.ToLower().Contains(TBSearch.Text.ToLower()) || p.Phone.Replace("(", "").Replace(")", "").Replace(" ", "").Replace("-", "").ToLower().Contains(TBSearch.Text.ToLower()) || p.Email.ToLower().Contains(TBSearch.Text.ToLower())).ToList();
 
             if (SortCombo.SelectedIndex == 0)
             {
@@ -103,7 +103,7 @@ namespace Rasstegaev_glazki
 
         private void Button_Click(object sender, RoutedEventArgs e)
         {
-            Manager.MainFrame.Navigate(new AddEditPage());
+            Manager.MainFrame.Navigate(new AddEditPage(null));
         }
 
         private void SortCombo_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -218,5 +218,35 @@ namespace Rasstegaev_glazki
             }
             UpdateServices();
         }
+
+        private void AddButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage(null));
+        }
+
+        private void EditButton_Click(object sender, RoutedEventArgs e)
+        {
+            Manager.MainFrame.Navigate(new AddEditPage((sender as Button).DataContext as Agent));
+        }
+
+        private void DeleteButton_Click(object sender, RoutedEventArgs e)
+        {
+            var currentServices = (sender as Button).DataContext as Agent;
+            if (MessageBox.Show("Вы точно хотите выполнить удаление?", "Внимание", MessageBoxButton.YesNo, MessageBoxImage.Question) == MessageBoxResult.Yes)
+            {
+                try
+                {
+                    Rasstegaev_glazkiEntities.GetContext().Agent.Remove(currentServices);
+                    Rasstegaev_glazkiEntities.GetContext().SaveChanges();
+                    ServiceListView.ItemsSource = Rasstegaev_glazkiEntities.GetContext().Agent.ToList();
+                    UpdateServices();
+                }
+                catch (Exception ex)
+                {
+                    MessageBox.Show(ex.Message.ToString());
+                }
+            }
+        }
     }
 }
+
