@@ -7,7 +7,7 @@
 // </auto-generated>
 //------------------------------------------------------------------------------
 
-namespace Rasstegaev_glazki
+namespace GubaidullinGlazki
 {
     using System;
     using System.Collections.Generic;
